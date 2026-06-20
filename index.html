@@ -64,7 +64,7 @@
             background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
             color: white !important;
             width: 28%;
-            display: block !important; /* Siempre visible */
+            display: block !important; 
             box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
         }
 
@@ -120,7 +120,6 @@
     
     <div class="timer-box" id="timer">Cargando tiempo de la encuesta...</div>
 
-    <!-- Barra de control superior inalterable -->
     <div class="validation-box">
         <label id="instruccionTop">INGRESA TU CÓDIGO Y LUEGO GUARDA TU PRONÓSTICO:</label>
         <div class="input-group">
@@ -140,8 +139,10 @@
 </div>
 
 <script>
-    // URL DE TU GOOGLE APPS SCRIPT
-    const URL_SERVIDOR = "AQUÍ_PEGA_LA_URL_LARGA_DE_TU_APPS_SCRIPT";
+    // ====================================================================
+    // ⚠️ REEMPLAZA ESTE TEXTO CON TU ENLACE LARGO DE GOOGLE (URL DE EJECUCIÓN WEB)
+    // ====================================================================
+    const URL_SERVIDOR = "https://script.google.com/macros/s/AKfycbzCj46gm18AAbWkk4R_40hrzHlQ9nmTbvmxOwZNRDJpoe_8RSLCoziIa3gu2Z_3_8yb/exec";
 
     const fechaCierre = new Date(new Date().getTime() + 2 * 60 * 60 * 1000); 
     let nombreUsuarioGlobal = "";
@@ -160,6 +161,7 @@
         { id: 10, loc: "NUEVA ZELANDA", flagL: "nz", vis: "EGIPTO", flagV: "eg" }
     ];
 
+    // Inyectar partidos modificados (Casillas totalmente vacías sin ceros)
     const listaDiv = document.getElementById('listaPartidos');
     partidos.forEach(p => {
         listaDiv.innerHTML += `
@@ -169,9 +171,9 @@
                     <span class="team-name">${p.loc}</span>
                 </div>
                 <div class="score-block">
-                    <input type="number" min="0" class="score-input" id="p${p.id}_l" required placeholder="0">
+                    <input type="number" min="0" class="score-input" id="p${p.id}_l" required value="">
                     <span class="vs">-</span>
-                    <input type="number" min="0" class="score-input" id="p${p.id}_v" required placeholder="0">
+                    <input type="number" min="0" class="score-input" id="p${p.id}_v" required value="">
                 </div>
                 <div class="team-block right">
                     <span class="team-name">${p.vis}</span>
@@ -192,101 +194,3 @@
         .then(data => {
             if(data.result === "success") {
                 nombreUsuarioGlobal = data.nombre;
-                
-                document.getElementById('labelNombreUsuario').innerText = nombreUsuarioGlobal;
-                document.getElementById('footerUsuario').style.display = "block";
-                document.getElementById('listaPartidos').classList.add('desbloqueado');
-                
-                document.getElementById('userCode').disabled = true;
-                document.getElementById('btnIngresar').disabled = true; // Desactiva el ingresar para evitar re-envíos
-                
-                document.getElementById('instruccionTop').innerText = "¡CÓDIGO ACEPTADO! RELLENA LOS GOLES Y USA EL BOTÓN VERDE:";
-                
-                alert(`¡Código válido! Bienvenido ${nombreUsuarioGlobal}.`);
-            } else {
-                alert("El código ingresado no existe en la base de datos.");
-            }
-        })
-        .catch(err => {
-            alert("Error de conexión al validar.");
-            console.error(err);
-        })
-        .finally(() => actualizarReloj());
-    }
-
-    function ejecutarEnvioFormulario() {
-        if(!nombreUsuarioGlobal) {
-            return alert("Primero debes introducir tu código y presionar 'INGRESAR' antes de guardar.");
-        }
-        const formulario = document.getElementById('quinielaForm');
-        if (formulario.reportValidity()) {
-            puedeEnviarFormulario = true; 
-            formulario.requestSubmit(); 
-        }
-    }
-
-    function actualizarReloj() {
-        const ahora = new Date().getTime();
-        const distancia = fechaCierre - ahora;
-        const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
-        const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
-
-        document.getElementById("timer").innerHTML = `TIEMPO RESTANTE JORNADA: ${horas}h ${minutos}m ${segundos}s`;
-
-        if (distancia < 0) {
-            clearInterval(countdown);
-            document.getElementById("timer").innerHTML = "¡TIEMPO JORNADA AGOTADO!";
-            document.getElementById("btnGuardarTop").disabled = true;
-            document.querySelectorAll('input').forEach(i => i.disabled = true);
-        }
-    }
-    const countdown = setInterval(actualizarReloj, 1000);
-
-    function guardarPronostico(event) {
-        event.preventDefault();
-        
-        if (!puedeEnviarFormulario) {
-            return false;
-        }
-
-        const btn = document.getElementById('btnGuardarTop');
-        btn.disabled = true;
-        btn.innerText = "... ENVIANDO";
-
-        let respuestas = { 
-            codigo: document.getElementById('userCode').value, 
-            nombre: nombreUsuarioGlobal,
-            pronosticos: {} 
-        };
-        
-        partidos.forEach(p => {
-            respuestas.pronosticos[`partido_${p.id}`] = {
-                local: document.getElementById(`p${p.id}_l`).value,
-                visita: document.getElementById(`p${p.id}_v`).value
-            };
-        });
-
-        fetch(URL_SERVIDOR, { method: "POST", body: JSON.stringify(respuestas) })
-        .then(res => res.json())
-        .then(response => {
-            if(response.result === "success") {
-                alert(`¡Tus pronósticos se guardaron perfectamente en el sistema!`);
-                location.reload();
-            } else {
-                alert("Error: " + response.message);
-                btn.disabled = false;
-                btn.innerText = "GUARDAR";
-                puedeEnviarFormulario = false; 
-            }
-        })
-        .catch(error => {
-            alert("Error de red al guardar.");
-            btn.disabled = false;
-            btn.innerText = "GUARDAR";
-            puedeEnviarFormulario = false; 
-        });
-    }
-</script>
-</body>
-</html>
