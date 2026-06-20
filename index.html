@@ -35,7 +35,7 @@
 
         .timer-box {
             background: rgba(153, 27, 27, 0.4); border: 1px solid #ef4444; color: #fca5a5;
-            padding: 3px; border-radius: 4px; text-align: center; font-size: 11px; margin-bottom: 5px; font-family: sans-serif;
+            padding: 5px; border-radius: 4px; text-align: center; font-size: 11px; margin-bottom: 5px; font-family: sans-serif;
         }
 
         /* Caja superior fija */
@@ -59,7 +59,7 @@
         }
         .btn-validar { background: var(--gold-gradient); width: 28%; }
         
-        /* Botón Guardar Verde Fijo e Inmutable */
+        /* Botón Guardar Verde */
         .btn-submit-top {
             background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
             color: white !important;
@@ -72,14 +72,15 @@
         
         .partidos-list { 
             flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;
-            margin-bottom: 5px; opacity: 0.2; pointer-events: none; transition: all 0.4s ease;
+            margin-bottom: 5px; opacity: 0.25; pointer-events: none; transition: all 0.4s ease;
+            overflow-y: auto;
         }
         .desbloqueado { opacity: 1 !important; pointer-events: auto !important; }
 
         .partido-card {
             display: flex; align-items: center; justify-content: space-between;
             background: var(--card-bg); border: var(--border-gold);
-            padding: 2px 8px; border-radius: 25px; flex-grow: 1; margin: 1px 0;
+            padding: 4px 8px; border-radius: 25px; flex-grow: 1; margin: 2px 0;
             box-shadow: inset 0 0 5px rgba(255,255,255,0.1);
         }
         .team-block { display: flex; align-items: center; width: 38%; gap: 6px; }
@@ -89,7 +90,7 @@
         
         .score-block { display: flex; align-items: center; gap: 4px; justify-content: center; width: 24%; }
         .score-input {
-            width: 26px; height: 22px; padding: 0; text-align: center;
+            width: 28px; height: 24px; padding: 0; text-align: center;
             font-size: 14px; font-weight: bold; border: 1px solid #bf953f; border-radius: 4px;
             background: rgba(0, 0, 0, 0.6); color: var(--gold); font-family: 'Arial', sans-serif;
         }
@@ -118,8 +119,9 @@
         <div class="sub-title">CÚPULA 2026</div>
     </header>
     
-    <div class="timer-box" id="timer">Cargando tiempo de la encuesta...</div>
+    <div class="timer-box" id="timer">Calculando tiempo restante...</div>
 
+    <!-- Barra de control superior inalterable -->
     <div class="validation-box">
         <label id="instruccionTop">INGRESA TU CÓDIGO Y LUEGO GUARDA TU PRONÓSTICO:</label>
         <div class="input-group">
@@ -140,10 +142,11 @@
 
 <script>
     // ====================================================================
-    // ⚠️ REEMPLAZA ESTE TEXTO CON TU ENLACE LARGO DE GOOGLE (URL DE EJECUCIÓN WEB)
+    // ⚠️ COLOCA TU URL DE APPS SCRIPT AQUÍ ADENTRO:
     // ====================================================================
     const URL_SERVIDOR = "https://script.google.com/macros/s/AKfycbzCj46gm18AAbWkk4R_40hrzHlQ9nmTbvmxOwZNRDJpoe_8RSLCoziIa3gu2Z_3_8yb/exec";
 
+    // Configuración del reloj
     const fechaCierre = new Date(new Date().getTime() + 2 * 60 * 60 * 1000); 
     let nombreUsuarioGlobal = "";
     let puedeEnviarFormulario = false; 
@@ -161,19 +164,20 @@
         { id: 10, loc: "NUEVA ZELANDA", flagL: "nz", vis: "EGIPTO", flagV: "eg" }
     ];
 
-    // Inyectar partidos modificados (Casillas totalmente vacías sin ceros)
+    // Inyección limpia y corregida: cajas totalmente vacías de inicio
     const listaDiv = document.getElementById('listaPartidos');
+    let htmlPartidos = "";
     partidos.forEach(p => {
-        listaDiv.innerHTML += `
+        htmlPartidos += `
             <div class="partido-card">
                 <div class="team-block">
                     <img src="https://flagcdn.com/w40/${p.flagL}.png" class="flag">
                     <span class="team-name">${p.loc}</span>
                 </div>
                 <div class="score-block">
-                    <input type="number" min="0" class="score-input" id="p${p.id}_l" required value="">
+                    <input type="number" min="0" class="score-input" id="p${p.id}_l" required>
                     <span class="vs">-</span>
-                    <input type="number" min="0" class="score-input" id="p${p.id}_v" required value="">
+                    <input type="number" min="0" class="score-input" id="p${p.id}_v" required>
                 </div>
                 <div class="team-block right">
                     <span class="team-name">${p.vis}</span>
@@ -182,6 +186,7 @@
             </div>
         `;
     });
+    listaDiv.innerHTML = htmlPartidos;
 
     function validarCodigoObtenerNombre() {
         const codigo = document.getElementById('userCode').value.trim();
@@ -194,3 +199,98 @@
         .then(data => {
             if(data.result === "success") {
                 nombreUsuarioGlobal = data.nombre;
+                
+                document.getElementById('labelNombreUsuario').innerText = nombreUsuarioGlobal;
+                document.getElementById('footerUsuario').style.display = "block";
+                document.getElementById('listaPartidos').classList.add('desbloqueado');
+                
+                document.getElementById('userCode').disabled = true;
+                document.getElementById('btnIngresar').disabled = true; 
+                
+                document.getElementById('instruccionTop').innerText = "¡CÓDIGO ACEPTADO! RELLENA LOS GOLES Y USA EL BOTÓN VERDE:";
+                
+                alert(`¡Código válido! Bienvenido ${nombreUsuarioGlobal}.`);
+            } else {
+                alert("El código ingresado no existe en la base de datos.");
+            }
+        })
+        .catch(err => {
+            alert("Error de conexión al validar. Verifica la URL de tu servidor.");
+            console.error(err);
+        })
+        .finally(() => actualizarReloj());
+    }
+
+    function ejecutarEnvioFormulario() {
+        if(!nombreUsuarioGlobal) {
+            return alert("Primero debes introducir tu código y presionar 'INGRESAR' antes de guardar.");
+        }
+        const formulario = document.getElementById('quinielaForm');
+        if (formulario.reportValidity()) {
+            puedeEnviarFormulario = true; 
+            formulario.requestSubmit(); 
+        }
+    }
+
+    function actualizarReloj() {
+        const ahora = new Date().getTime();
+        const distancia = fechaCierre - ahora;
+        if (isNaN(distancia) || distancia < 0) {
+            document.getElementById("timer").innerHTML = "TIEMPO RESTANTE JORNADA: 1h 59m 30s";
+            return;
+        }
+        const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+        const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+        document.getElementById("timer").innerHTML = `TIEMPO RESTANTE JORNADA: ${horas}h ${minutos}m ${segundos}s`;
+    }
+    
+    // Ejecutar reloj inicialmente para quitar el texto estático
+    actualizarReloj();
+    const countdown = setInterval(actualizarReloj, 1000);
+
+    function guardarPronostico(event) {
+        event.preventDefault();
+        if (!puedeEnviarFormulario) return false;
+
+        const btn = document.getElementById('btnGuardarTop');
+        btn.disabled = true;
+        btn.innerText = "... ENVIANDO";
+
+        let respuestas = { 
+            codigo: document.getElementById('userCode').value, 
+            nombre: nombreUsuarioGlobal,
+            pronosticos: {} 
+        };
+        
+        partidos.forEach(p => {
+            respuestas.pronosticos[`partido_${p.id}`] = {
+                local: document.getElementById(`p${p.id}_l`).value,
+                visita: document.getElementById(`p${p.id}_v`).value
+            };
+        });
+
+        fetch(URL_SERVIDOR, { method: "POST", body: JSON.stringify(respuestas) })
+        .then(res => res.json())
+        .then(response => {
+            if(response.result === "success") {
+                alert(`¡Tus pronósticos se guardaron perfectamente en el sistema!`);
+                location.reload();
+            } else {
+                alert("Error: " + response.message);
+                btn.disabled = false;
+                btn.innerText = "GUARDAR";
+                puedeEnviarFormulario = false; 
+            }
+        })
+        .catch(error => {
+            alert("Error de red al guardar.");
+            btn.disabled = false;
+            btn.innerText = "GUARDAR";
+            puedeEnviarFormulario = false; 
+        });
+    }
+</script>
+</body>
+</html>
