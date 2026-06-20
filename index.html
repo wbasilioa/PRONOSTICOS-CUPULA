@@ -24,63 +24,63 @@
         .container {
             display: flex; flex-direction: column;
             height: 100vh; max-width: 480px; margin: 0 auto;
-            padding: 10px;
+            padding: 15px 10px 10px 10px;
             background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');
         }
 
-        header { text-align: center; margin-bottom: 5px; }
+        header { text-align: center; margin-bottom: 10px; }
         .title-top { font-size: 14px; letter-spacing: 1px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); margin: 0; }
-        .title-main { font-size: 22px; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 2px 0; text-transform: uppercase; }
+        .title-main { font-size: 24px; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 4px 0; text-transform: uppercase; }
         .sub-title { font-size: 11px; border: var(--border-gold); padding: 2px 10px; display: inline-block; border-radius: 20px; background: rgba(0,0,0,0.4); letter-spacing: 2px; }
 
         .timer-box {
             background: rgba(153, 27, 27, 0.4); border: 1px solid #ef4444; color: #fca5a5;
-            padding: 5px; border-radius: 4px; text-align: center; font-size: 11px; margin-bottom: 5px; font-family: sans-serif;
+            padding: 6px; border-radius: 4px; text-align: center; font-size: 12px; margin-bottom: 10px; font-family: sans-serif;
+            font-weight: bold;
         }
 
-        /* Caja superior fija */
         .validation-box {
             background: var(--card-bg); border: var(--border-gold); border-radius: 8px;
-            padding: 8px; text-align: center; margin-bottom: 5px;
-            box-shadow: 0 0 10px rgba(170, 119, 28, 0.2);
+            padding: 12px; text-align: center; margin-bottom: 10px;
+            box-shadow: 0 0 15px rgba(170, 119, 28, 0.2);
+            transition: all 0.3s ease;
         }
-        .validation-box label { display: block; font-size: 11px; color: #cbd5e1; margin-bottom: 4px; font-family: sans-serif; }
-        .input-group { display: flex; gap: 4px; justify-content: center; align-items: center; }
+        .validation-box label { display: block; font-size: 11px; color: #cbd5e1; margin-bottom: 6px; font-family: sans-serif; letter-spacing: 0.5px; }
+        .input-group { display: flex; gap: 6px; justify-content: center; align-items: center; }
         
         input[type="text"] {
-            width: 40%; padding: 6px; border: 1px solid #bf953f; border-radius: 4px;
-            background: rgba(0,0,0,0.5); color: #fff; font-size: 13px; text-transform: uppercase; text-align: center;
+            width: 40%; padding: 8px; border: 1px solid #bf953f; border-radius: 4px;
+            background: rgba(0,0,0,0.6); color: #fff; font-size: 14px; text-transform: uppercase; text-align: center;
+            font-family: 'Arial', sans-serif; font-weight: bold;
         }
         
         .btn-validar, .btn-submit-top {
-            color: #000; border: none; padding: 6px 10px;
+            color: #000; border: none; padding: 8px 12px;
             font-size: 11px; font-weight: bold; border-radius: 4px; cursor: pointer;
-            text-transform: uppercase; white-space: nowrap;
+            text-transform: uppercase; white-space: nowrap; transition: transform 0.1s ease;
         }
         .btn-validar { background: var(--gold-gradient); width: 28%; }
+        .btn-validar:active { transform: scale(0.95); }
         
-        /* Botón Guardar Verde */
         .btn-submit-top {
             background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
-            color: white !important;
-            width: 28%;
-            display: block !important; 
+            color: white !important; width: 28%; display: none;
             box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
         }
+        .btn-submit-top:active { transform: scale(0.95); }
 
         #quinielaForm { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
         
+        /* Contenedor oculto al inicio para una pantalla limpia */
         .partidos-list { 
-            flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;
-            margin-bottom: 5px; opacity: 0.25; pointer-events: none; transition: all 0.4s ease;
-            overflow-y: auto;
+            display: none; flex-direction: column; justify-content: flex-start;
+            flex-grow: 1; overflow-y: auto; margin-bottom: 8px; padding-right: 2px;
         }
-        .desbloqueado { opacity: 1 !important; pointer-events: auto !important; }
 
         .partido-card {
             display: flex; align-items: center; justify-content: space-between;
             background: var(--card-bg); border: var(--border-gold);
-            padding: 4px 8px; border-radius: 25px; flex-grow: 1; margin: 2px 0;
+            padding: 6px 10px; border-radius: 25px; margin: 4px 0; min-height: 42px;
             box-shadow: inset 0 0 5px rgba(255,255,255,0.1);
         }
         .team-block { display: flex; align-items: center; width: 38%; gap: 6px; }
@@ -90,23 +90,30 @@
         
         .score-block { display: flex; align-items: center; gap: 4px; justify-content: center; width: 24%; }
         .score-input {
-            width: 28px; height: 24px; padding: 0; text-align: center;
-            font-size: 14px; font-weight: bold; border: 1px solid #bf953f; border-radius: 4px;
+            width: 32px; height: 26px; padding: 0; text-align: center;
+            font-size: 15px; font-weight: bold; border: 1px solid #bf953f; border-radius: 4px;
             background: rgba(0, 0, 0, 0.6); color: var(--gold); font-family: 'Arial', sans-serif;
         }
+        /* Remueve flechas nativas en inputs numéricos */
+        .score-input::-webkit-outer-spin-button, .score-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .vs { font-size: 10px; color: #bf953f; font-weight: bold; }
 
         .user-footer-box {
             border: 2px solid #bf953f; border-radius: 8px;
             background: linear-gradient(to bottom, rgba(6,26,48,0.9), rgba(3,13,26,0.95));
-            padding: 6px; text-align: center; margin-top: auto;
+            padding: 8px; text-align: center; margin-top: auto;
             box-shadow: 0 0 12px rgba(255,215,0,0.2);
-            display: none;
+            display: none; animation: fadeInUp 0.4s ease forwards;
         }
         .user-name-text {
-            font-family: 'Georgia', serif; font-style: italic; font-size: 18px;
+            font-family: 'Georgia', serif; font-style: italic; font-size: 19px;
             background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin: 0; font-weight: bold;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -119,11 +126,10 @@
         <div class="sub-title">CÚPULA 2026</div>
     </header>
     
-    <div class="timer-box" id="timer">Calculando tiempo restante...</div>
+    <div class="timer-box" id="timer">Sincronizando con Excel...</div>
 
-    <!-- Barra de control superior inalterable -->
     <div class="validation-box">
-        <label id="instruccionTop">INGRESA TU CÓDIGO Y LUEGO GUARDA TU PRONÓSTICO:</label>
+        <label id="instruccionTop">INGRESA TU CÓDIGO AUTORIZADO PARA ACCEDER:</label>
         <div class="input-group">
             <input type="text" id="userCode" placeholder="CÓDIGO">
             <button type="button" class="btn-validar" id="btnIngresar" onclick="validarCodigoObtenerNombre()">INGRESAR</button>
@@ -135,96 +141,141 @@
         <div class="partidos-list" id="listaPartidos"></div>
 
         <div class="user-footer-box" id="footerUsuario">
-            <p class="user-name-text" id="labelNombreUsuario">Nombre Apellido</p>
+            <p class="user-name-text" id="labelNombreUsuario"></p>
         </div>
     </form>
 </div>
 
 <script>
-    // ====================================================================
-    // ⚠️ COLOCA TU URL DE APPS SCRIPT AQUÍ ADENTRO:
-    // ====================================================================
+    // URL vinculada a tu nuevo ecosistema de Google Sheets
     const URL_SERVIDOR = "https://script.google.com/macros/s/AKfycbw6fE6oTwsSrtLfoE3oiWAhzXlOcLfQ3i169N6j4w5gkZJwevsVLciehds_eJygkFVv/exec";
 
-    // Configuración del reloj
-    const fechaCierre = new Date(new Date().getTime() + 2 * 60 * 60 * 1000); 
+    let fechaCierreRaw = "";
     let nombreUsuarioGlobal = "";
     let puedeEnviarFormulario = false; 
+    let totalPartidosCargados = 0;
 
-    const partidos = [
-        { id: 1, loc: "BRASIL", flagL: "br", vis: "HAITÍ", flagV: "ht" },
-        { id: 2, loc: "TURQUÍA", flagL: "tr", vis: "PARAGUAY", flagV: "py" },
-        { id: 3, loc: "PAÍSES BAJOS", flagL: "nl", vis: "SUECIA", flagV: "se" },
-        { id: 4, loc: "ALEMANIA", flagL: "de", vis: "COSTA DE MARFIL", flagV: "ci" },
-        { id: 5, loc: "ECUADOR", flagL: "ec", vis: "CURAZAO", flagV: "cw" },
-        { id: 6, loc: "TÚNEZ", flagL: "tn", vis: "JAPÓN", flagV: "jp" },
-        { id: 7, loc: "ESPAÑA", flagL: "es", vis: "ARABIA SAUDITA", flagV: "sa" },
-        { id: 8, loc: "BÉLGICA", flagL: "be", vis: "IRÁN", flagV: "ir" },
-        { id: 9, loc: "URUGUAY", flagL: "uy", vis: "CABO VERDE", flagV: "cv" },
-        { id: 10, loc: "NUEVA ZELANDA", flagL: "nz", vis: "EGIPTO", flagV: "eg" }
-    ];
+    const mapaBanderas = {
+        "ARGENTINA": "ar", "AUSTRIA": "at", "FRANCIA": "fr", "IRAK": "iq",
+        "NORUEGA": "no", "SENEGAL": "sn", "JORDANIA": "jo", "ARGELIA": "dz",
+        "PORTUGAL": "pt", "UZBEKISTÁN": "uz", "INGLATERRA": "gb", "GHANA": "gh",
+        "PANAMÁ": "pa", "CROACIA": "hr", "COLOMBIA": "co", "REP. DEL CONGO": "cg",
+        "SUIZA": "ch", "CANADÁ": "ca", "BOSNIA Y HERZEG.": "ba", "CATAR": "qa",
+        "BRASIL": "br", "HAITÍ": "ht", "TURQUÍA": "tr", "PARAGUAY": "py",
+        "PAÍSES BAJOS": "nl", "SUECIA": "se", "ALEMANIA": "de", "COSTA DE MARFIL": "ci",
+        "ECUADOR": "ec", "CURAZAO": "cw", "TÚNEZ": "tn", "JAPÓN": "jp",
+        "ESPAÑA": "es", "ARABIA SAUDITA": "sa", "BÉLGICA": "be", "IRÁN": "ir",
+        "URUGUAY": "uy", "CABO VERDE": "cv", "NUEVA ZELANDA": "nz", "EGIPTO": "eg",
+        "MÉXICO": "mx", "COREA DEL SUR": "kr", "ESTADOS UNIDOS": "us", "AUSTRALIA": "au"
+    };
 
-    // Inyección limpia y corregida: cajas totalmente vacías de inicio
-    const listaDiv = document.getElementById('listaPartidos');
-    let htmlPartidos = "";
-    partidos.forEach(p => {
-        htmlPartidos += `
-            <div class="partido-card">
-                <div class="team-block">
-                    <img src="https://flagcdn.com/w40/${p.flagL}.png" class="flag">
-                    <span class="team-name">${p.loc}</span>
-                </div>
-                <div class="score-block">
-                    <input type="number" min="0" class="score-input" id="p${p.id}_l" required>
-                    <span class="vs">-</span>
-                    <input type="number" min="0" class="score-input" id="p${p.id}_v" required>
-                </div>
-                <div class="team-block right">
-                    <span class="team-name">${p.vis}</span>
-                    <img src="https://flagcdn.com/w40/${p.flagV}.png" class="flag">
-                </div>
-            </div>
-        `;
-    });
-    listaDiv.innerHTML = htmlPartidos;
+    function obtenerCodigoBandera(nombrePais) {
+        let limpio = nombrePais.toUpperCase().trim();
+        return mapaBanderas[limpio] || "un";
+    }
+
+    function procesarFechaEstricta(fechaTexto) {
+        if(!fechaTexto) return null;
+        let partes = fechaTexto.split(/[- :]/);
+        if(partes.length < 5) return null;
+        // El formato esperado es YYYY, MM-1, DD, HH, MM, SS
+        return new Date(partes[0], partes[1] - 1, partes[2], partes[3], partes[4], partes[5] || 0);
+    }
+
+    // Carga inicial transparente
+    function cargarConfiguracionInicial() {
+        fetch(URL_SERVIDOR)
+        .then(res => res.json())
+        .then(data => {
+            if(data.fechaCierre) {
+                fechaCierreRaw = data.fechaCierre;
+                actualizarReloj();
+            }
+            
+            if(data.partidos && data.partidos.length > 0) {
+                totalPartidosCargados = data.partidos.length;
+                const listaDiv = document.getElementById('listaPartidos');
+                let htmlPartidos = "";
+                
+                data.partidos.forEach(p => {
+                    let flagL = obtenerCodigoBandera(p.loc);
+                    let flagV = obtenerCodigoBandera(p.vis);
+                    
+                    htmlPartidos += `
+                        <div class="partido-card">
+                            <div class="team-block">
+                                <img src="https://flagcdn.com/w40/${flagL}.png" class="flag">
+                                <span class="team-name">${p.loc}</span>
+                            </div>
+                            <div class="score-block">
+                                <input type="number" min="0" class="score-input" id="p${p.id}_l" required>
+                                <span class="vs">-</span>
+                                <input type="number" min="0" class="score-input" id="p${p.id}_v" required>
+                            </div>
+                            <div class="team-block right">
+                                <span class="team-name">${p.vis}</span>
+                                <img src="https://flagcdn.com/w40/${flagV}.png" class="flag">
+                            </div>
+                        </div>
+                    `;
+                });
+                listaDiv.innerHTML = htmlPartidos;
+            }
+        })
+        .catch(err => {
+            document.getElementById("timer").innerHTML = "Error de sincronización con la base de datos.";
+            console.error(err);
+        });
+    }
+    
+    cargarConfiguracionInicial();
 
     function validarCodigoObtenerNombre() {
         const codigo = document.getElementById('userCode').value.trim();
         if(!codigo) return alert("Por favor escribe un código.");
 
-        document.getElementById('timer').innerText = "Verificando código en el servidor...";
+        document.getElementById('timer').innerText = "Verificando credenciales...";
 
         fetch(`${URL_SERVIDOR}?codigo=${encodeURIComponent(codigo)}`)
         .then(res => res.json())
         .then(data => {
+            if(data.fechaCierre) fechaCierreRaw = data.fechaCierre;
+
             if(data.result === "success") {
                 nombreUsuarioGlobal = data.nombre;
                 
+                // Transición: Desplegar la lista de partidos y el pie de firma del usuario
                 document.getElementById('labelNombreUsuario').innerText = nombreUsuarioGlobal;
                 document.getElementById('footerUsuario').style.display = "block";
-                document.getElementById('listaPartidos').classList.add('desbloqueado');
                 
+                const listaDiv = document.getElementById('listaPartidos');
+                listaDiv.style.display = "flex";
+                listaDiv.style.animation = "fadeInUp 0.5s ease forwards";
+                
+                // Ajustar controles superiores
                 document.getElementById('userCode').disabled = true;
-                document.getElementById('btnIngresar').disabled = true; 
+                document.getElementById('btnIngresar').style.display = "none"; 
+                document.getElementById('btnGuardarTop').style.display = "block"; 
                 
-                document.getElementById('instruccionTop').innerText = "¡CÓDIGO ACEPTADO! RELLENA LOS GOLES Y USA EL BOTÓN VERDE:";
+                document.getElementById('instruccionTop').innerText = "CÓDIGO CORRECTO. REGISTRA TUS GOLES Y GUARDA:";
+                alert(`¡Acceso concedido! Bienvenido/a ${nombreUsuarioGlobal}.`);
                 
-                alert(`¡Código válido! Bienvenido ${nombreUsuarioGlobal}.`);
+            } else if (data.result === "ya_jugo") {
+                document.getElementById('instruccionTop').innerText = "ACCESO RECHAZADO: EL CÓDIGO YA REGISTRÓ PRONÓSTICOS.";
+                alert(`Lo sentimos ${data.nombre}, este código ya fue utilizado para guardar pronósticos en esta jornada.`);
             } else {
-                alert("El código ingresado no existe en la base de datos.");
+                alert("El código ingresado no se encuentra en el padrón de usuarios.");
             }
         })
         .catch(err => {
-            alert("Error de conexión al validar. Verifica la URL de tu servidor.");
+            alert("Error de red al intentar validar el código.");
             console.error(err);
         })
         .finally(() => actualizarReloj());
     }
 
     function ejecutarEnvioFormulario() {
-        if(!nombreUsuarioGlobal) {
-            return alert("Primero debes introducir tu código y presionar 'INGRESAR' antes de guardar.");
-        }
+        if(!nombreUsuarioGlobal) return;
         const formulario = document.getElementById('quinielaForm');
         if (formulario.reportValidity()) {
             puedeEnviarFormulario = true; 
@@ -233,22 +284,31 @@
     }
 
     function actualizarReloj() {
+        let fechaCierre = procesarFechaEstricta(fechaCierreRaw);
+        if (!fechaCierre || isNaN(fechaCierre.getTime())) return;
+
         const ahora = new Date().getTime();
         const distancia = fechaCierre - ahora;
-        if (isNaN(distancia) || distancia < 0) {
-            document.getElementById("timer").innerHTML = "TIEMPO RESTANTE JORNADA: 1h 59m 30s";
+        
+        if (distancia < 0) {
+            document.getElementById("timer").innerHTML = "¡TIEMPO JORNADA AGOTADO!";
+            document.getElementById("btnGuardarTop").disabled = true;
+            document.getElementById("btnGuardarTop").style.background = "#4b5563";
+            document.getElementById("btnGuardarTop").innerText = "CERRADO";
+            document.querySelectorAll('.score-input').forEach(i => i.disabled = true);
             return;
         }
+
+        const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
         const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
         const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
 
-        document.getElementById("timer").innerHTML = `TIEMPO RESTANTE JORNADA: ${horas}h ${minutos}m ${segundos}s`;
+        let textoDias = dias > 0 ? `${dias}d ` : "";
+        document.getElementById("timer").innerHTML = `TIEMPO RESTANTE JORNADA: ${textoDias}${horas}h ${minutos}m ${segundos}s`;
     }
     
-    // Ejecutar reloj inicialmente para quitar el texto estático
-    actualizarReloj();
-    const countdown = setInterval(actualizarReloj, 1000);
+    setInterval(actualizarReloj, 1000);
 
     function guardarPronostico(event) {
         event.preventDefault();
@@ -264,28 +324,28 @@
             pronosticos: {} 
         };
         
-        partidos.forEach(p => {
-            respuestas.pronosticos[`partido_${p.id}`] = {
-                local: document.getElementById(`p${p.id}_l`).value,
-                visita: document.getElementById(`p${p.id}_v`).value
+        for (let k = 1; k <= totalPartidosCargados; k++) {
+            respuestas.pronosticos[`partido_${k}`] = {
+                local: document.getElementById(`p${k}_l`).value,
+                visita: document.getElementById(`p${k}_v`).value
             };
-        });
+        }
 
         fetch(URL_SERVIDOR, { method: "POST", body: JSON.stringify(respuestas) })
         .then(res => res.json())
         .then(response => {
             if(response.result === "success") {
-                alert(`¡Tus pronósticos se guardaron perfectamente en el sistema!`);
+                alert(`¡Tus pronósticos se han guardado exitosamente en el centralizador!`);
                 location.reload();
             } else {
-                alert("Error: " + response.message);
+                alert("Error del servidor: " + response.message);
                 btn.disabled = false;
                 btn.innerText = "GUARDAR";
                 puedeEnviarFormulario = false; 
             }
         })
         .catch(error => {
-            alert("Error de red al guardar.");
+            alert("Error de conexión al guardar los datos.");
             btn.disabled = false;
             btn.innerText = "GUARDAR";
             puedeEnviarFormulario = false; 
