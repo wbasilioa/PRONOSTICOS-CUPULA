@@ -69,11 +69,12 @@
 
         /* Fila de Partido idéntica a la imagen */
         .partido-card {
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--card-bg); border: var(--border-gold);
-            padding: 2px 8px; border-radius: 25px; flex-grow: 1; margin: 2px 0;
-            box-shadow: inset 0 0 5px rgba(255,255,255,0.1);
-        }
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--card-bg); border: var(--border-gold);
+    padding: 1px 8px; /* Reducimos a 1px arriba y abajo */
+    border-radius: 25px; flex-grow: 1; margin: 1px 0; /* Bajamos el margen a 1px */
+    box-shadow: inset 0 0 5px rgba(255,255,255,0.1);
+}
         .team-block { display: flex; align-items: center; width: 38%; gap: 6px; }
         .team-block.right { justify-content: flex-end; text-align: right; }
         .flag { width: 22px; height: 15px; border-radius: 2px; object-fit: cover; box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
@@ -82,10 +83,12 @@
         /* Contenedor Central de Goles */
         .score-block { display: flex; align-items: center; gap: 4px; justify-content: center; width: 24%; }
         .score-input {
-            width: 26px; height: 24px; padding: 0; text-align: center;
-            font-size: 14px; font-weight: bold; border: 1px solid #bf953f; border-radius: 4px;
-            background: rgba(0, 0, 0, 0.6); color: var(--gold); font-family: 'Arial', sans-serif;
-        }
+    width: 26px; 
+    height: 20px; /* Reducido de 24px a 20px */
+    padding: 0; text-align: center;
+    font-size: 13px; font-weight: bold; border: 1px solid #bf953f; border-radius: 4px;
+    background: rgba(0, 0, 0, 0.6); color: var(--gold); font-family: 'Arial', sans-serif;
+}
         .vs { font-size: 10px; color: #bf953f; font-weight: bold; }
 
         /* Bloque de Nombre Abajo (Estilo Jairo Escalante) */
